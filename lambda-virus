@@ -1,0 +1,70 @@
+# Homework Instructions:
+# Implement a version of naive exact matching algorithm that is strand-aware
+# Should look for occurences as well as occurences of reverse complement
+# If input P and its reverse complement are identical, 
+# match offset should only be given once
+
+#import urllib.request
+#lambdagenome = urllib.request.urlretrieve("https://d28rh4a8wq0iu5.cloudfront.net/ads1/data/lambda_virus.fa")
+#lambdagenome = 'lambda_virus.fa'
+
+# reverse complement function for strand-aware algorithm
+def reverseComplement(s):
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N': 'N'}
+    t = ''
+    for base in s:
+        t = complement[base] + t
+    return t
+    
+# Open and read FASTQ files
+def readFastq(file):
+    sequences = []
+    qualities = []
+    with open(file) as fh:
+        while True:
+            fh.readline()
+            seq = fh.readline.rstrip()
+            fh.readline()
+            qual = fh.readline().rstrip()
+            if len(seq) == 0:
+                break
+            sequences.append(seq)
+            qualities.append(qual)
+    return sequences, qualities
+
+def readGenome(filename):
+    genome = ''
+    with open(filename, 'r') as f:
+        for line in filename:
+            # ignore header line with genome information
+            if not line[0] == '>':
+                genome += line.rstrip()
+    return genome
+
+# Naive matching function to search for matching strings in genome
+def naive(p, t):
+    occurrences = []
+    occurrencesrev = []
+    reversegenome = reverseComplement(p)
+    for i in range(len(t) - len(p) + 1):
+        match = True
+        for j in range(len(p)):
+            if t[i+j] != p[j]:
+                match = False
+                break
+            if match:
+                occurrences.append(i)
+    if p!= reversegenome:
+        for i in range(len(t) - len(reversegenome) + 1):
+            match = True
+            for j in range(len(reversegenome)):
+                if t[i+j] != reversegenome[j]:
+                    match = False
+                    break
+            if match:
+                occurencesrev.append(i)
+    return occurrences, occurences2
+
+
+lgenome = readGenome('lambda_virus.fa')
+analysis = naive(lgenome, "CGCG")
