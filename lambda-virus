@@ -35,7 +35,7 @@ def readFastq(file):
 def readGenome(filename):
     genome = ''
     with open(filename, 'r') as f:
-        for line in filename:
+        for line in f:
             # ignore header line with genome information
             if not line[0] == '>':
                 genome += line.rstrip()
@@ -62,9 +62,11 @@ def naive(p, t):
                     match = False
                     break
             if match:
-                occurencesrev.append(i)
-    return occurrences, occurences2
+                occurences.append(i)
+    return occurrences #, occurencesrev
 
 
 lgenome = readGenome('lambda_virus.fa')
 analysis = naive(lgenome, "CGCG")
+
+print(analysis)
